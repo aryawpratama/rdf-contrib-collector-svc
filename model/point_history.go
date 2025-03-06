@@ -7,7 +7,7 @@ import (
 )
 
 type PointHistory struct {
-	ID              primitive.ObjectID `json:"id,omitempty" bson:"id"`
+	ID              primitive.ObjectID `json:"id,omitempty" bson:"_id"`
 	ActionHistoryId primitive.ObjectID `json:"action_history_id,omitempty" bson:"action_history_id"`
 	Point           int64              `json:"point,omitempty" bson:"point"`
 	CreatedAt       time.Time          `json:"created_at,omitempty" bson:"created_at"`

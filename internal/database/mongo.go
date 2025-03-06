@@ -11,6 +11,15 @@ import (
 	"go.uber.org/zap"
 )
 
+type MongoDBCollections struct {
+	ActionHistories string
+	Contributors    string
+	GitRepos        string
+	Points          string
+	PointHistories  string
+	PullRequests    string
+}
+
 func NewConnection(ctx context.Context, config config.Config, log *zap.Logger) *mongo.Client {
 	client, err := mongo.Connect(
 		options.Client().ApplyURI(

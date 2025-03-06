@@ -7,7 +7,7 @@ import (
 )
 
 type PullRequest struct {
-	ID             primitive.ObjectID `json:"id,omitempty" bson:"id"`
+	ID             primitive.ObjectID `json:"id,omitempty" bson:"_id"`
 	ContributorID  primitive.ObjectID `json:"contributor_id,omitempty" bson:"contributor_id"`
 	PullRequestURL string             `json:"pull_request_url,omitempty" bson:"pull_request_url"`
 	SrcBranch      string             `json:"src_branch,omitempty" bson:"src_branch"`

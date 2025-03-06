@@ -7,7 +7,7 @@ import (
 )
 
 type Contributor struct {
-	ID         primitive.ObjectID `json:"id,omitempty" bson:"id"`
+	ID         primitive.ObjectID `json:"id,omitempty" bson:"_id"`
 	Username   string             `json:"username,omitempty" bson:"username"`
 	Avatar     string             `json:"avatar,omitempty" bson:"avatar"`
 	ProfileURL string             `json:"profile_url,omitempty" bson:"profile_url"`
