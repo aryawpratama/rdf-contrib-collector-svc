@@ -1,12 +1,14 @@
 package usecase
 
 import (
+	"context"
+
 	"github.com/ryakadev/rdf-contrib-collector/repository"
 	"go.uber.org/zap"
 )
 
 type UseCase interface {
-	HandleWebhook(event interface{}) error
+	HandleWebhook(ctx context.Context, event interface{}) error
 }
 
 type usecase struct {

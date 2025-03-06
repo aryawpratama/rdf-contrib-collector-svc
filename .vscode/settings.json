@@ -3,6 +3,7 @@
     "Model",
     "Repo",
     "Transport",
-    "Config"
+    "Config",
+    "Usecase"
   ]
 }
