@@ -8,8 +8,12 @@ import (
 
 type PullRequest struct {
 	ID             primitive.ObjectID `json:"id,omitempty" bson:"_id"`
-	ContributorID  primitive.ObjectID `json:"contributor_id,omitempty" bson:"contributor_id"`
 	RepoID         primitive.ObjectID `json:"repo_id,omitempty" bson:"repo_id"`
+	Repo           GitRepo            `json:"repo,omitempty" bson:"repo"`
+	ContributorID  primitive.ObjectID `json:"contributor_id,omitempty" bson:"contributor_id"`
+	Contributor    Contributor        `json:"contributor,omitempty" bson:"contributor"`
+	MergedByID     primitive.ObjectID `json:"merged_by_id,omitempty" bson:"merged_by_id"`
+	MergedBy       Contributor        `json:"merged_by,omitempty" bson:"merged_by"`
 	PullRequestURL string             `json:"pull_request_url,omitempty" bson:"pull_request_url"`
 	SrcBranch      string             `json:"src_branch,omitempty" bson:"src_branch"`
 	DstBranch      string             `json:"dst_branch,omitempty" bson:"dst_branch"`
