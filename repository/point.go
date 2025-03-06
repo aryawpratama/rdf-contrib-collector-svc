@@ -19,9 +19,8 @@ func (r *repository) CreatePoint(ctx context.Context, payload *model.Point) (*mo
 }
 
 // UpdatePoint implements Repository.
-func (r *repository) UpdatePoint(ctx context.Context, payload *model.Point) (*mongo.UpdateResult, error) {
+func (r *repository) UpdatePoint(ctx context.Context, payload *model.Point, filter *model.Point) (*mongo.UpdateResult, error) {
 	collection := r.mongo.Collection(r.col.Points)
-	filter := bson.M{"_id": payload.ID}
 	update := bson.M{"$set": payload}
 
 	res, err := collection.UpdateOne(ctx, filter, update)

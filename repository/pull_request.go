@@ -53,9 +53,8 @@ func (r *repository) GetPullRequests(ctx context.Context, offset int64, limit in
 }
 
 // UpdatePullRequest implements Repository.
-func (r *repository) UpdatePullRequest(ctx context.Context, payload *model.PullRequest) (*mongo.UpdateResult, error) {
+func (r *repository) UpdatePullRequest(ctx context.Context, payload *model.PullRequest, filter *model.PullRequest) (*mongo.UpdateResult, error) {
 	collection := r.mongo.Collection(r.col.PullRequests)
-	filter := bson.M{"_id": payload.ID}
 	update := bson.M{"$set": payload}
 
 	res, err := collection.UpdateOne(ctx, filter, update)

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/ryakadev/rdf-contrib-collector/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -26,7 +27,7 @@ func (r *repository) GetContributor(ctx context.Context, filter *model.Contribut
 	err := collection.FindOne(ctx, filter).Decode(&contrib)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return model.Contributor{}, nil
+			return model.Contributor{}, errors.New("Contributor not found")
 		}
 		return model.Contributor{}, err
 	}
@@ -53,9 +54,8 @@ func (r *repository) GetContributors(ctx context.Context, offset int64, limit in
 }
 
 // UpdateContributor implements Repository.
-func (r *repository) UpdateContributor(ctx context.Context, payload *model.Contributor) (*mongo.UpdateResult, error) {
+func (r *repository) UpdateContributor(ctx context.Context, payload *model.Contributor, filter *model.Contributor) (*mongo.UpdateResult, error) {
 	collection := r.mongo.Collection(r.col.Contributors)
-	filter := bson.M{"_id": payload.ID}
 	update := bson.M{"$set": payload}
 
 	res, err := collection.UpdateOne(ctx, filter, update)

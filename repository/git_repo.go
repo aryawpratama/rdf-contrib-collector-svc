@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/ryakadev/rdf-contrib-collector/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -24,7 +25,7 @@ func (r *repository) GetGitRepo(ctx context.Context, filter *model.GitRepo) (mod
 	err := collection.FindOne(ctx, filter).Decode(&contrib)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return model.GitRepo{}, nil
+			return model.GitRepo{}, errors.New("Repo not found")
 		}
 		return model.GitRepo{}, err
 	}
@@ -49,9 +50,8 @@ func (r *repository) GetGitRepos(ctx context.Context, offset int64, limit int64,
 	return repos, nil
 }
 
-func (r *repository) UpdateGitRepo(ctx context.Context, payload *model.GitRepo) (*mongo.UpdateResult, error) {
+func (r *repository) UpdateGitRepo(ctx context.Context, payload *model.GitRepo, filter *model.GitRepo) (*mongo.UpdateResult, error) {
 	collection := r.mongo.Collection(r.col.GitRepos)
-	filter := bson.M{"_id": payload.ID}
 	update := bson.M{"$set": payload}
 
 	res, err := collection.UpdateOne(ctx, filter, update)

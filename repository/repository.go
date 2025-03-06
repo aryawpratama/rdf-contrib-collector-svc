@@ -14,12 +14,12 @@ type Repository interface {
 	GetActionHistories(ctx context.Context, offset int64, limit int64, filter *model.ActionHistory) ([]model.ActionHistory, error)
 
 	CreateContributor(ctx context.Context, payload *model.Contributor) (*mongo.InsertOneResult, error)
-	UpdateContributor(ctx context.Context, payload *model.Contributor) (*mongo.UpdateResult, error)
+	UpdateContributor(ctx context.Context, payload *model.Contributor, filter *model.Contributor) (*mongo.UpdateResult, error)
 	GetContributor(ctx context.Context, filter *model.Contributor) (model.Contributor, error)
 	GetContributors(ctx context.Context, offset int64, limit int64, filter *model.Contributor) ([]model.Contributor, error)
 
 	CreatePoint(ctx context.Context, payload *model.Point) (*mongo.InsertOneResult, error)
-	UpdatePoint(ctx context.Context, payload *model.Point) (*mongo.UpdateResult, error)
+	UpdatePoint(ctx context.Context, payload *model.Point, filter *model.Point) (*mongo.UpdateResult, error)
 	GetPoint(ctx context.Context, filter *model.Point) (model.Point, error)
 	GetPoints(ctx context.Context, offset int64, limit int64, filter *model.Point) ([]model.Point, error)
 
@@ -28,12 +28,12 @@ type Repository interface {
 	GetPointHistories(ctx context.Context, offset int64, limit int64, filter *model.PointHistory) ([]model.PointHistory, error)
 
 	CreatePullRequest(ctx context.Context, payload *model.PullRequest) (*mongo.InsertOneResult, error)
-	UpdatePullRequest(ctx context.Context, payload *model.PullRequest) (*mongo.UpdateResult, error)
+	UpdatePullRequest(ctx context.Context, payload *model.PullRequest, filter *model.PullRequest) (*mongo.UpdateResult, error)
 	GetPullRequest(ctx context.Context, filter *model.PullRequest) (model.PullRequest, error)
 	GetPullRequests(ctx context.Context, offset int64, limit int64, filter *model.PullRequest) ([]model.PullRequest, error)
 
 	CreateGitRepo(ctx context.Context, payload *model.GitRepo) (*mongo.InsertOneResult, error)
-	UpdateGitRepo(ctx context.Context, payload *model.GitRepo) (*mongo.UpdateResult, error)
+	UpdateGitRepo(ctx context.Context, payload *model.GitRepo, filter *model.GitRepo) (*mongo.UpdateResult, error)
 	GetGitRepo(ctx context.Context, filter *model.GitRepo) (model.GitRepo, error)
 	GetGitRepos(ctx context.Context, offset int64, limit int64, filter *model.GitRepo) ([]model.GitRepo, error)
 }
