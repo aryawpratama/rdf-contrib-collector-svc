@@ -21,16 +21,19 @@ type MongoDBCollections struct {
 }
 
 func NewConnection(ctx context.Context, config config.Config, log *zap.Logger) *mongo.Client {
+	creds := options.Credential{
+		AuthSource: "admin",
+		Username:   config.Mongo.Username,
+		Password:   config.Mongo.Password,
+	}
 	client, err := mongo.Connect(
 		options.Client().ApplyURI(
 			fmt.Sprintf(
-				"mongodb://%s:%s@%s:%d",
-				config.Mongo.Username,
-				config.Mongo.Password,
+				"mongodb://%s:%d",
 				config.Mongo.Host,
 				config.Mongo.Port,
 			),
-		),
+		).SetAuth(creds),
 	)
 
 	if err != nil {
