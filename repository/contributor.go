@@ -4,25 +4,64 @@ import (
 	"context"
 
 	"github.com/ryakadev/rdf-contrib-collector/model"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 // CreateContributor implements Repository.
-func (r *repository) CreateContributor(ctx context.Context, payload *model.Contributor) error {
-	panic("unimplemented")
+func (r *repository) CreateContributor(ctx context.Context, payload *model.Contributor) (*mongo.InsertOneResult, error) {
+	res, err := r.mongo.Collection(r.col.Contributors).InsertOne(ctx, payload)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // GetContributor implements Repository.
-func (r *repository) GetContributor(ctx context.Context, id primitive.ObjectID) (model.Contributor, error) {
-	panic("unimplemented")
+func (r *repository) GetContributor(ctx context.Context, filter *model.Contributor) (model.Contributor, error) {
+	var contrib model.Contributor
+
+	collection := r.mongo.Collection(r.col.Contributors)
+	err := collection.FindOne(ctx, filter).Decode(&contrib)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return model.Contributor{}, nil
+		}
+		return model.Contributor{}, err
+	}
+
+	return contrib, nil
 }
 
 // GetContributors implements Repository.
 func (r *repository) GetContributors(ctx context.Context, offset int64, limit int64, filter *model.Contributor) ([]model.Contributor, error) {
-	panic("unimplemented")
+	var contributors []model.Contributor
+	cursor, err := r.mongo.Collection(r.col.Contributors).Find(ctx, filter, options.Find().SetSkip(offset).SetLimit(limit))
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+	for cursor.Next(ctx) {
+		var contrib model.Contributor
+		if err := cursor.Decode(&contrib); err != nil {
+			return nil, err
+		}
+		contributors = append(contributors, contrib)
+	}
+	return contributors, nil
 }
 
 // UpdateContributor implements Repository.
-func (r *repository) UpdateContributor(ctx context.Context, payload *model.Contributor) error {
-	panic("unimplemented")
+func (r *repository) UpdateContributor(ctx context.Context, payload *model.Contributor) (*mongo.UpdateResult, error) {
+	collection := r.mongo.Collection(r.col.Contributors)
+	filter := bson.M{"_id": payload.ID}
+	update := bson.M{"$set": payload}
+
+	res, err := collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
