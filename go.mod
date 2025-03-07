@@ -6,7 +6,6 @@ require (
 	github.com/google/go-github/v69 v69.2.0
 	github.com/gorilla/mux v1.8.1
 	github.com/spf13/viper v1.19.0
-	go.mongodb.org/mongo-driver v1.17.3
 	go.mongodb.org/mongo-driver/v2 v2.1.0
 	go.uber.org/zap v1.27.0
 )
