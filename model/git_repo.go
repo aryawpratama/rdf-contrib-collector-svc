@@ -7,8 +7,12 @@ import (
 )
 
 type GitRepo struct {
-	ID        bson.ObjectID `json:"id,omitempty" bson:"_id"`
-	FullName  string        `json:"full_name,omitempty" bson:"full_name"`
-	CreatedAt time.Time     `json:"created_at" bson:"created_at"`
-	UpdatedAt time.Time     `json:"updated_at" bson:"updated_at"`
+	ID         bson.ObjectID `json:"id,omitempty" bson:"_id"`
+	CmdGitRepo `bson:",inline"`
+}
+
+type CmdGitRepo struct {
+	FullName  string    `json:"full_name,omitempty" bson:"full_name"`
+	CreatedAt time.Time `json:"created_at" bson:"created_at"`
+	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
 }
