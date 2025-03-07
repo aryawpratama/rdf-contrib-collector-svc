@@ -25,7 +25,7 @@ func (r *repository) GetGitRepo(ctx context.Context, filter *model.GitRepo) (mod
 	err := collection.FindOne(ctx, filter).Decode(&contrib)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return model.GitRepo{}, errors.New("Repo not found")
+			return model.GitRepo{}, errors.New("GitRepo not found")
 		}
 		return model.GitRepo{}, err
 	}

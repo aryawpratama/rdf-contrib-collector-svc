@@ -4,6 +4,7 @@
     "Repo",
     "Transport",
     "Config",
-    "Usecase"
+    "Usecase",
+    "Database"
   ]
 }
