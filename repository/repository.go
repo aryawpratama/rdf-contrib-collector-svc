@@ -5,37 +5,38 @@ import (
 
 	"github.com/ryakadev/rdf-contrib-collector/internal/database"
 	"github.com/ryakadev/rdf-contrib-collector/model"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 type Repository interface {
-	CreateActionHistory(ctx context.Context, payload *model.ActionHistory) (*mongo.InsertOneResult, error)
-	GetActionHistory(ctx context.Context, filter *model.ActionHistory) (model.ActionHistory, error)
-	GetActionHistories(ctx context.Context, offset int64, limit int64, filter *model.ActionHistory) ([]model.ActionHistory, error)
+	CreateActionHistory(ctx context.Context, payload *model.CmdActionHistory) (*mongo.InsertOneResult, error)
+	GetActionHistory(ctx context.Context, filter *bson.M) (model.ActionHistory, error)
+	GetActionHistories(ctx context.Context, offset int64, limit int64, filter *bson.M) ([]model.ActionHistory, error)
 
-	CreateContributor(ctx context.Context, payload *model.Contributor) (*mongo.InsertOneResult, error)
-	UpdateContributor(ctx context.Context, payload *model.Contributor, filter *model.Contributor) (*mongo.UpdateResult, error)
-	GetContributor(ctx context.Context, filter *model.Contributor) (model.Contributor, error)
-	GetContributors(ctx context.Context, offset int64, limit int64, filter *model.Contributor) ([]model.Contributor, error)
+	CreateContributor(ctx context.Context, payload *model.CmdContributor) (*mongo.InsertOneResult, error)
+	UpdateContributor(ctx context.Context, payload *model.CmdContributor, filter *bson.M) (*mongo.UpdateResult, error)
+	GetContributor(ctx context.Context, filter *bson.M) (model.Contributor, error)
+	GetContributors(ctx context.Context, offset int64, limit int64, filter *bson.M) ([]model.Contributor, error)
 
-	CreatePoint(ctx context.Context, payload *model.Point) (*mongo.InsertOneResult, error)
-	UpdatePoint(ctx context.Context, payload *model.Point, filter *model.Point) (*mongo.UpdateResult, error)
-	GetPoint(ctx context.Context, filter *model.Point) (model.Point, error)
-	GetPoints(ctx context.Context, offset int64, limit int64, filter *model.Point) ([]model.Point, error)
+	CreatePoint(ctx context.Context, payload *model.CmdPoint) (*mongo.InsertOneResult, error)
+	UpdatePoint(ctx context.Context, payload *model.CmdPoint, filter *bson.M) (*mongo.UpdateResult, error)
+	GetPoint(ctx context.Context, filter *bson.M) (model.Point, error)
+	GetPoints(ctx context.Context, offset int64, limit int64, filter *bson.M) ([]model.Point, error)
 
-	CreatePointHistory(ctx context.Context, payload *model.PointHistory) (*mongo.InsertOneResult, error)
-	GetPointHistory(ctx context.Context, filter *model.PointHistory) (model.PointHistory, error)
-	GetPointHistories(ctx context.Context, offset int64, limit int64, filter *model.PointHistory) ([]model.PointHistory, error)
+	CreatePointHistory(ctx context.Context, payload *model.CmdPointHistory) (*mongo.InsertOneResult, error)
+	GetPointHistory(ctx context.Context, filter *bson.M) (model.PointHistory, error)
+	GetPointHistories(ctx context.Context, offset int64, limit int64, filter *bson.M) ([]model.PointHistory, error)
 
-	CreatePullRequest(ctx context.Context, payload *model.PullRequest) (*mongo.InsertOneResult, error)
-	UpdatePullRequest(ctx context.Context, payload *model.PullRequest, filter *model.PullRequest) (*mongo.UpdateResult, error)
-	GetPullRequest(ctx context.Context, filter *model.PullRequest) (model.PullRequest, error)
-	GetPullRequests(ctx context.Context, offset int64, limit int64, filter *model.PullRequest) ([]model.PullRequest, error)
+	CreatePullRequest(ctx context.Context, payload *model.CmdPullRequest) (*mongo.InsertOneResult, error)
+	UpdatePullRequest(ctx context.Context, payload *model.CmdPullRequest, filter *bson.M) (*mongo.UpdateResult, error)
+	GetPullRequest(ctx context.Context, filter *bson.M) (model.PullRequest, error)
+	GetPullRequests(ctx context.Context, offset int64, limit int64, filter *bson.M) ([]model.PullRequest, error)
 
-	CreateGitRepo(ctx context.Context, payload *model.GitRepo) (*mongo.InsertOneResult, error)
-	UpdateGitRepo(ctx context.Context, payload *model.GitRepo, filter *model.GitRepo) (*mongo.UpdateResult, error)
-	GetGitRepo(ctx context.Context, filter *model.GitRepo) (model.GitRepo, error)
-	GetGitRepos(ctx context.Context, offset int64, limit int64, filter *model.GitRepo) ([]model.GitRepo, error)
+	CreateGitRepo(ctx context.Context, payload *model.CmdGitRepo) (*mongo.InsertOneResult, error)
+	UpdateGitRepo(ctx context.Context, payload *model.CmdGitRepo, filter *bson.M) (*mongo.UpdateResult, error)
+	GetGitRepo(ctx context.Context, filter *bson.M) (model.GitRepo, error)
+	GetGitRepos(ctx context.Context, offset int64, limit int64, filter *bson.M) ([]model.GitRepo, error)
 }
 
 type repository struct {

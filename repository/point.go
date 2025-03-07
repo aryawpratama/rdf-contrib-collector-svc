@@ -2,15 +2,16 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/ryakadev/rdf-contrib-collector/model"
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 // CreatePoint implements Repository.
-func (r *repository) CreatePoint(ctx context.Context, payload *model.Point) (*mongo.InsertOneResult, error) {
+func (r *repository) CreatePoint(ctx context.Context, payload *model.CmdPoint) (*mongo.InsertOneResult, error) {
 	res, err := r.mongo.Collection(r.col.Points).InsertOne(ctx, payload)
 	if err != nil {
 		return nil, err
@@ -19,7 +20,7 @@ func (r *repository) CreatePoint(ctx context.Context, payload *model.Point) (*mo
 }
 
 // UpdatePoint implements Repository.
-func (r *repository) UpdatePoint(ctx context.Context, payload *model.Point, filter *model.Point) (*mongo.UpdateResult, error) {
+func (r *repository) UpdatePoint(ctx context.Context, payload *model.CmdPoint, filter *bson.M) (*mongo.UpdateResult, error) {
 	collection := r.mongo.Collection(r.col.Points)
 	update := bson.M{"$set": payload}
 
@@ -32,14 +33,14 @@ func (r *repository) UpdatePoint(ctx context.Context, payload *model.Point, filt
 }
 
 // GetPoint implements Repository.
-func (r *repository) GetPoint(ctx context.Context, filter *model.Point) (model.Point, error) {
+func (r *repository) GetPoint(ctx context.Context, filter *bson.M) (model.Point, error) {
 	var p model.Point
 
 	collection := r.mongo.Collection(r.col.Points)
 	err := collection.FindOne(ctx, filter).Decode(&p)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return model.Point{}, nil
+			return model.Point{}, errors.New("Point not found")
 		}
 		return model.Point{}, err
 	}
@@ -48,7 +49,7 @@ func (r *repository) GetPoint(ctx context.Context, filter *model.Point) (model.P
 }
 
 // GetPoints implements Repository.
-func (r *repository) GetPoints(ctx context.Context, offset int64, limit int64, filter *model.Point) ([]model.Point, error) {
+func (r *repository) GetPoints(ctx context.Context, offset int64, limit int64, filter *bson.M) ([]model.Point, error) {
 	var pHistories []model.Point
 	cursor, err := r.mongo.Collection(r.col.Points).Find(ctx, filter, options.Find().SetSkip(offset).SetLimit(limit))
 	if err != nil {

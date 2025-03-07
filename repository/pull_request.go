@@ -2,15 +2,16 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/ryakadev/rdf-contrib-collector/model"
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 // CreatePullRequest implements Repository.
-func (r *repository) CreatePullRequest(ctx context.Context, payload *model.PullRequest) (*mongo.InsertOneResult, error) {
+func (r *repository) CreatePullRequest(ctx context.Context, payload *model.CmdPullRequest) (*mongo.InsertOneResult, error) {
 	res, err := r.mongo.Collection(r.col.PullRequests).InsertOne(ctx, payload)
 	if err != nil {
 		return nil, err
@@ -19,14 +20,14 @@ func (r *repository) CreatePullRequest(ctx context.Context, payload *model.PullR
 }
 
 // GetPullRequest implements Repository.
-func (r *repository) GetPullRequest(ctx context.Context, filter *model.PullRequest) (model.PullRequest, error) {
+func (r *repository) GetPullRequest(ctx context.Context, filter *bson.M) (model.PullRequest, error) {
 	var p model.PullRequest
 
 	collection := r.mongo.Collection(r.col.PullRequests)
 	err := collection.FindOne(ctx, filter).Decode(&p)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return model.PullRequest{}, nil
+			return model.PullRequest{}, errors.New("Pull request not found")
 		}
 		return model.PullRequest{}, err
 	}
@@ -35,7 +36,7 @@ func (r *repository) GetPullRequest(ctx context.Context, filter *model.PullReque
 }
 
 // GetPullRequests implements Repository.
-func (r *repository) GetPullRequests(ctx context.Context, offset int64, limit int64, filter *model.PullRequest) ([]model.PullRequest, error) {
+func (r *repository) GetPullRequests(ctx context.Context, offset int64, limit int64, filter *bson.M) ([]model.PullRequest, error) {
 	var pr []model.PullRequest
 	cursor, err := r.mongo.Collection(r.col.Points).Find(ctx, filter, options.Find().SetSkip(offset).SetLimit(limit))
 	if err != nil {
@@ -53,7 +54,7 @@ func (r *repository) GetPullRequests(ctx context.Context, offset int64, limit in
 }
 
 // UpdatePullRequest implements Repository.
-func (r *repository) UpdatePullRequest(ctx context.Context, payload *model.PullRequest, filter *model.PullRequest) (*mongo.UpdateResult, error) {
+func (r *repository) UpdatePullRequest(ctx context.Context, payload *model.CmdPullRequest, filter *bson.M) (*mongo.UpdateResult, error) {
 	collection := r.mongo.Collection(r.col.PullRequests)
 	update := bson.M{"$set": payload}
 
