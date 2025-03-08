@@ -24,4 +24,5 @@ type PointActionData struct {
 	MergeContrib   int
 	MergeLead      int
 	CommentLead    int
+	CommentContrib int
 }
