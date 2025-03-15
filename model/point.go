@@ -18,11 +18,11 @@ type CmdPoint struct {
 }
 
 type PointActionData struct {
-	CreatePR       int
-	ForkRepo       int
-	ResolveComment int
-	MergeContrib   int
-	MergeLead      int
-	CommentLead    int
-	CommentContrib int
+	CreatePR       int64
+	ForkRepo       int64
+	ResolveComment int64
+	MergeContrib   int64
+	MergeLead      int64
+	CommentLead    int64
+	CommentContrib int64
 }

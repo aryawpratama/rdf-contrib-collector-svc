@@ -4,6 +4,7 @@ type Webhook struct {
 	Avatar         string
 	RepoName       string
 	PrUrl          string
+	SrcPrUrl       string
 	Action         string
 	HRef           string
 	BRef           string
