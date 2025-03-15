@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rdf-contrib-collector-ingress
+  namespace: ryakadevforum
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: collector.aryawpratama.my.id
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rdf-contrib-collector-svc
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - collector.aryawpratama.my.id
+    secretName: rdf-contrib-collector-tls

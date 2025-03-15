@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rdf-contrib-collector
+  namespace: ryakadevforum
+  labels:
+    app: rdf-contrib-collector
+spec:
+  selector:
+    matchLabels:
+      app: rdf-contrib-collector
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: rdf-contrib-collector
+    spec:
+      imagePullSecrets:
+      - name: private-registry
+      containers:
+      - name: rdf-contrib-collector
+        image: registry.aryawpratama.my.id/aryawpratama/rdf-contrib-collector:v1
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /_status/healthz
+            port: 8000
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        envFrom:
+        - configMapRef:
+            name: rdf-contrib-collector-configmap
+        - secretRef:
+            name: rdf-contrib-collector-secret
+        ports:
+        - containerPort: 8000
+          name: http
+      restartPolicy: Always

@@ -28,4 +28,10 @@ func NewTransport(cfg config.Config, log *zap.Logger, usecase usecase.UseCase) {
 
 func (t transport) registerGitRoute(r *mux.Router) {
 	r.HandleFunc("/git/webhook", t.GitWebhookHandler).Methods(http.MethodPost)
+	r.HandleFunc("/_status/healthz",
+		func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(http.StatusText(200)))
+		},
+	).Methods(http.MethodGet)
 }

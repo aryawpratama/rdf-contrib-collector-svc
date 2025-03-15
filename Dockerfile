@@ -5,8 +5,8 @@ RUN apk update && apk add git
 
 # setting up the go environments
 ENV GO111MODULE=on GOOS=linux GOARCH=amd64 CGO_ENABLED=0
-ENV GOPATH /app
-ENV GOBIN /go/bin
+ENV GOPATH=/app
+ENV GOBIN=/go/bin
 
 # create a directory for main app
 RUN mkdir -p /app

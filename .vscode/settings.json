@@ -5,6 +5,7 @@
     "Transport",
     "Config",
     "Usecase",
-    "Database"
+    "Database",
+    "Deployment"
   ]
 }
