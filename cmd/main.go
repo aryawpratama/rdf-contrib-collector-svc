@@ -20,7 +20,7 @@ func main() {
 	ctx := context.TODO()
 
 	cfg := config.Load()
-	level, err := zapcore.ParseLevel(cfg.Log.Level)
+	level, err := zapcore.ParseLevel(cfg.LogLevel)
 	if err != nil {
 		log.Fatalf("Can't parse log level: %s", err)
 	}
@@ -32,8 +32,8 @@ func main() {
 	transport.NewTransport(cfg, zaplog, u)
 
 	// Start http server
-	fmt.Printf("Listening on %s:%d...\n", cfg.App.Host, cfg.App.Port)
-	if err := http.ListenAndServe(fmt.Sprintf("%s:%d", "0.0.0.0", cfg.App.Port), nil); err != nil {
+	fmt.Printf("Listening on %s:%d...\n", cfg.AppHost, cfg.AppPort)
+	if err := http.ListenAndServe(fmt.Sprintf("%s:%d", "0.0.0.0", cfg.AppPort), nil); err != nil {
 		log.Fatal("Can't start http server", zap.Error(err))
 	}
 }

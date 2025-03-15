@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/ryakadev/rdf-contrib-collector/config"
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -23,15 +24,21 @@ type MongoDBCollections struct {
 func NewConnection(ctx context.Context, config config.Config, log *zap.Logger) *mongo.Client {
 	creds := options.Credential{
 		AuthSource: "admin",
-		Username:   config.Mongo.Username,
-		Password:   config.Mongo.Password,
+		Username:   config.MongoUsername,
+		Password:   config.MongoPassword,
+	}
+	log.Info("Connecting to MongoDB...")
+	p, err := strconv.Atoi(config.MongoPort)
+	if err != nil {
+		log.Fatal("Port is not int")
+		panic(err)
 	}
 	client, err := mongo.Connect(
 		options.Client().ApplyURI(
 			fmt.Sprintf(
 				"mongodb://%s:%d",
-				config.Mongo.Host,
-				config.Mongo.Port,
+				config.MongoHost,
+				p,
 			),
 		).SetAuth(creds),
 	)
