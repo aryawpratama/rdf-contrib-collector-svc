@@ -5,7 +5,7 @@ metadata:
   namespace: ryakadevforum
 spec:
   selector:
-    app: rdf-contrib-collector-svc
+    app: rdf-contrib-collector
   type: ClusterIP
   ports:
   - name: rdf-contrib-collector-svc
