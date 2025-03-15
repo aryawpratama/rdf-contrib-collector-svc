@@ -2,34 +2,32 @@ package config
 
 import (
 	"log"
+	"os"
 
-	"github.com/spf13/viper"
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	AppEnv        string `mapstructure:"APP_ENV"`
-	AppHost       string `mapstructure:"APP_HOST"`
-	AppPort       int    `mapstructure:"APP_PORT"`
-	AppSecret     string `mapstructure:"GITHUB_SECRET"`
-	MongoHost     string `mapstructure:"MONGO_HOST"`
-	MongoPort     string `mapstructure:"MONGO_PORT"`
-	MongoUsername string `mapstructure:"MOGNO_USERNAME"`
-	MongoPassword string `mapstructure:"MONGO_PASS"`
-	LogLevel      string `mapstructure:"LOG_LEVEL"`
+	AppEnv          string
+	AppHost         string
+	AppPort         string
+	AppSecret       string
+	MongoStringConn string
+	LogLevel        string
 }
 
 func Load() Config {
-	env := Config{}
-	viper.SetConfigFile(".env")
 
-	if err := viper.ReadInConfig(); err != nil {
-		log.Printf("Cannot find .env file. Err: %s", err.Error())
-		panic(err)
+	if err := godotenv.Load(); err != nil {
+		log.Printf("Cannot find .env file, using default env. Err: %s", err.Error())
 	}
-
-	err := viper.Unmarshal(&env)
-	if err != nil {
-		log.Fatal("Environment can't be loaded: ", err)
+	env := Config{
+		AppEnv:          os.Getenv("APP_ENV"),
+		AppHost:         os.Getenv("APP_HOST"),
+		AppPort:         os.Getenv("APP_PORT"),
+		AppSecret:       os.Getenv("GITHUB_SECRET"),
+		MongoStringConn: os.Getenv("MONGO_STRINGCONN"),
+		LogLevel:        os.Getenv("LOG_LEVEL"),
 	}
 
 	if env.AppEnv == "development" {

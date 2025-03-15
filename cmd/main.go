@@ -26,14 +26,16 @@ func main() {
 	}
 
 	zaplog := logger.New(level)
+
+	zaplog.Info(fmt.Sprintf("App Env: %s", cfg.AppEnv))
 	db := database.NewConnection(ctx, cfg, zaplog)
 	r := repository.New(db)
 	u := usecase.New(r, zaplog)
 	transport.NewTransport(cfg, zaplog, u)
 
 	// Start http server
-	fmt.Printf("Listening on %s:%d...\n", cfg.AppHost, cfg.AppPort)
-	if err := http.ListenAndServe(fmt.Sprintf("%s:%d", "0.0.0.0", cfg.AppPort), nil); err != nil {
+	fmt.Printf("Listening on %s:%s...\n", cfg.AppHost, cfg.AppPort)
+	if err := http.ListenAndServe(fmt.Sprintf("%s:%s", "0.0.0.0", cfg.AppPort), nil); err != nil {
 		log.Fatal("Can't start http server", zap.Error(err))
 	}
 }
